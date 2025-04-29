@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>もっちーへ、お誕生日おめでとう！</title>
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic Pro', 'メイリオ', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            color: #1e3932;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(#f0c51410 2px, transparent 2px);
+            background-size: 40px 40px;
+        }
+        .container {
+            max-width: 800px;
+            width: 90%;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+            border: 1px solid #f0c5140f;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 40px;
+            height: 40px;
+            background: #f0c514;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            z-index: 1;
+        }
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: #f0c514;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            z-index: 1;
+        }
+        .header {
+            background: linear-gradient(135deg, #00704A 70%, #f0c514 130%);
+            color: white;
+            padding: 1.5rem 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            background: #f0c514;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0.7;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .puzzle-container {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #00704A;
+            box-shadow: 2px 4px 15px rgba(240, 197, 20, 0.15);
+            position: relative;
+        }
+        .puzzle-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: #f0c514;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            z-index: 1;
+        }
+        .puzzle {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .answer-form {
+            margin: 2rem 0;
+        }
+        input {
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            width: 60%;
+            max-width: 300px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #f0c514;
+            box-shadow: 0 0 5px rgba(240, 197, 20, 0.5);
+        }
+        button {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #00704A 80%, #f0c514 150%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #005237 80%, #e6bb12 150%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        button::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: #f0c514;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+        .gift-container {
+            display: none;
+            margin-top: 2rem;
+        }
+        .celebration {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .celebration-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 90%;
+            width: 500px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(240, 197, 20, 0.5);
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 15px rgba(240, 197, 20, 0.5);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(240, 197, 20, 0.8);
+            }
+        }
+        .celebration-content::before,
+        .celebration-content::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #f0c514;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            z-index: 1;
+        }
+        .celebration-content::before {
+            top: -15px;
+            left: -15px;
+        }
+        .celebration-content::after {
+            bottom: -15px;
+            right: -15px;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+        /* ヒントのドロップダウンスタイル */
+        .hint-dropdown {
+            margin-top: 2rem;
+            width: 80%;
+            max-width: 400px;
+        }
+        .hint-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid rgba(240, 197, 20, 0.5);
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .hint-select:focus {
+            outline: none;
+            border-color: #00704A;
+            box-shadow: 0 0 10px rgba(0, 113, 74, 0.3);
+        }
+        .hint-content {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f7f9fa;
+            border: 1px solid rgba(240, 197, 20, 0.3);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none; /* 初期状態は非表示 */
+        }
+        .gift-button {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #00704A 80%, #f0c514 150%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 10px rgba(240, 197, 20, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .gift-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 0 15px rgba(240, 197, 20, 0.7);
+        }
+        .gift-button::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            width: 15px;
+            height: 15px;
+            background: #f0c514;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0.7;
+        }
+        .coffee-cup {
+            width: 160px;
+            margin: 1rem 0;
+            filter: drop-shadow(0 0 5px rgba(240, 197, 20, 0.5));
+        }
+        .answer-feedback {
+            margin-top: 1rem;
+            color: #d42f2f;
+            font-weight: bold;
+            display: none; /* 初期状態は非表示 */
+        }
+        .star {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #f0c514;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0.7;
+        }
+        .page-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* クリックイベントを透過 */
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✨ もっちーへの誕生日サプライズ ✨</h1>
+    </div>
+
+    <div class="container">
+        <p>お久しぶりだぜ！もっちー！<br>
+        今日はもっちーの26歳のお誕生日ですね！おめでとう！<br>
+        26歳をお祝いするためにプレゼントを用意したんだけど、今年は趣向を凝らして、自分でGETする形式にしてみた！是非26歳一発目の課題を解いて、最高のスタートダッシュを切ってくれ！！</p>
+
+        <p>プレゼントを受け取る前のなぞかけだ！！。</p>
+
+        <div class="puzzle-container">
+            <div class="puzzle">
+                <strong>問題</strong><br>
+                下の数字列が示すメッセージを解いて、解答してね。<br><br>
+                <code>23 45 31 7 38 27 16 33 27 29</code><br><br>
+                <code>"答えは大文字の英語の文字列だよ！"</code>
+            </div>
+        </div>
+        <div class="answer-form">
+            <input type="text" id="answer-input" placeholder="答えを入力してください" value="SPECIALDAY">
+            <button onclick="checkAnswer()">解答する</button>
+            <p class="answer-feedback" id="answer-feedback">残念！もう一度考えてみてください。</p>
+        </div>
+        
+        <div class="hint-dropdown">
+            <select id="hint-select" class="hint-select" onchange="showSelectedHint()">
+                <option value="">ヒントを選択してください</option>
+                <option value="hint1">ヒント1</option>
+                <option value="hint2">ヒント2</option>
+                <option value="hint3">ヒント3 (かなり具体的)</option>
+            </select>
+
+            <div id="hint1" class="hint-content">
+                今日はもっちーの誕生日だね！4/29日、26歳になりました。
+            </div>
+
+            <div id="hint2" class="hint-content">
+                4,29,26,4,29,26...を引くといいらしい？ (問題の数字の数だけ繰り返します)
+            </div>
+
+            <div id="hint3" class="hint-content">
+                その番号をアルファベットに変換するとメッセージが？！ (A=1, B=2, C=3...)
+            </div>
+            </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2>🎉 お誕生日おめでとう! 🎉</h2>
+            <p>もっちー改めて、26歳のお誕生日おめでとう！</p>
+            <p>これからの一年が素敵な年になりますように。</p>
+            <img src="starbacks_images.jpg" alt="コーヒーカップ" class="coffee-cup"> <p>あなたへのささやかなプレゼントです。<br>お好きなスターバックスのドリンクを楽しんでください♪</p>
+            <a href="#" class="gift-button" id="gift-link">スタバギフト3000円分を受け取る</a>
+        </div>
+    </div>
+
+    <script>
+        // === ここからJavaScript変更 ===
+        // なぞかけの答え (小文字で統一)
+        const correctAnswer = "specialday"; // 正しい答えを設定
+
+        // 背景に星を追加
+        function createPageStars() {
+            const pageStars = document.createElement('div');
+            pageStars.className = 'page-stars';
+            document.body.appendChild(pageStars);
+
+            for (let i = 0; i < 15; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.width = Math.random() * 10 + 10 + 'px';
+                star.style.height = Math.random() * 10 + 10 + 'px';
+                star.style.opacity = Math.random() * 0.3 + 0.1;
+
+                pageStars.appendChild(star);
+
+                // きらきらアニメーション
+                star.animate(
+                    [
+                        { opacity: star.style.opacity, transform: 'scale(1)' },
+                        { opacity: parseFloat(star.style.opacity) * 1.5, transform: 'scale(1.2)' }, // opacityを数値に変換
+                        { opacity: star.style.opacity, transform: 'scale(1)' }
+                    ],
+                    {
+                        duration: Math.random() * 3000 + 2000,
+                        iterations: Infinity,
+                        direction: 'alternate',
+                        easing: 'ease-in-out'
+                    }
+                );
+            }
+        }
+
+        // ページ読み込み時に星を作成
+        window.addEventListener('DOMContentLoaded', createPageStars);
+
+        // ヒントドロップダウンの処理
+        function showSelectedHint() {
+            // すべてのヒントを非表示にする
+            const allHints = document.querySelectorAll('.hint-content');
+            allHints.forEach(hint => {
+                hint.style.display = 'none';
+            });
+
+            // 選択されたヒントを表示
+            const selectedValue = document.getElementById('hint-select').value;
+            if (selectedValue) {
+                document.getElementById(selectedValue).style.display = 'block';
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer-input').value;
+            const feedback = document.getElementById('answer-feedback');
+
+            // 答えのチェック - 大文字小文字を区別せず、空白を除去して比較
+            if (userAnswer.trim().toLowerCase() === correctAnswer) {
+                // 正解アニメーション表示
+                showCelebration();
+                feedback.style.display = "none"; // 正解時はフィードバックを非表示
+            } else {
+                // 不正解のフィードバック
+                feedback.style.display = "block";
+                // 一定時間後にフィードバックを非表示にする
+                setTimeout(() => {
+                    feedback.style.display = "none";
+                }, 3000); // 3秒後に非表示
+            }
+        }
+        // === ここまでJavaScript変更 ===
+
+        function showCelebration() {
+            const celebration = document.getElementById('celebration');
+            celebration.style.display = "flex";
+
+            // 紙吹雪アニメーション
+            createConfetti();
+
+            // eギフトへのリンク設定 (重要：実際のURLに置き換えてください)
+            document.getElementById('gift-link').setAttribute('href', 'https://gift.starbucks.co.jp/c/1745uOlfwwAtMb9XoO3FBqpcCllmsLUz');
+
+            // お祝いスター演出
+            createCelebrationStars();
+        }
+
+        function createCelebrationStars() {
+            const celebrationContent = document.querySelector('.celebration-content');
+            if (!celebrationContent) return; // 要素が見つからない場合は処理を中断
+
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.position = 'absolute'; // celebration-content基準で配置するため
+                    star.style.width = Math.random() * 15 + 15 + 'px';
+                    star.style.height = Math.random() * 15 + 15 + 'px';
+
+                    // 星の位置を celebration-content の中央付近から放射状に配置
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 50 + 50; // 中心からの距離
+                    const centerX = celebrationContent.offsetWidth / 2;
+                    const centerY = celebrationContent.offsetHeight / 2;
+
+                    // 要素の中心を基準にするため、星のサイズの半分を引く
+                    const starWidth = parseFloat(star.style.width);
+                    const starHeight = parseFloat(star.style.height);
+                    star.style.top = (centerY + Math.sin(angle) * distance - starHeight / 2) + 'px';
+                    star.style.left = (centerX + Math.cos(angle) * distance - starWidth / 2) + 'px';
+
+                    star.style.opacity = 0; // 初期状態は透明
+                    celebrationContent.appendChild(star); // celebration-content内に追加
+
+                    // 星が輝くアニメーション
+                    const animation = star.animate(
+                        [
+                            { opacity: 0, transform: 'scale(0.3) rotate(0deg)' },
+                            { opacity: 1, transform: 'scale(1.2) rotate(180deg)' },
+                            { opacity: 0, transform: 'scale(0.3) rotate(360deg)' }
+                        ],
+                        {
+                            duration: 2000, // アニメーション時間
+                            easing: 'ease-in-out',
+                            fill: 'forwards' // アニメーション終了時の状態を維持
+                        }
+                    );
+                    // アニメーション終了後に要素を削除
+                    animation.onfinish = function() {
+                         // 少し遅延させてから削除しないと、最後が見えないことがある
+                        setTimeout(() => {
+                           if (star.parentNode) { // 親要素が存在するか確認してから削除
+                                star.remove();
+                           }
+                        }, 50);
+                    };
+                }, i * 300); // 少しずつずらして星を表示
+            }
+        }
+
+
+        function createConfetti() {
+            const confettiCount = 120;
+            const celebration = document.getElementById('celebration');
+            if (!celebration) return; // 要素がない場合は中断
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+
+                // 紙吹雪と星を混ぜる
+                const isGoldStar = Math.random() < 0.3; // 30%の確率で金の星
+
+                if (isGoldStar) {
+                    confetti.style.backgroundColor = 'transparent'; // 星は背景色なし
+                    confetti.style.width = Math.random() * 15 + 10 + 'px';
+                    confetti.style.height = Math.random() * 15 + 10 + 'px';
+                    confetti.style.clipPath = 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)';
+                    confetti.style.background = '#f0c514'; // 星の色
+                } else {
+                    // ランダムな色
+                    const colors = ['#00704A', '#f0c514', '#ffffff', '#ff88a0', '#8c5e31', '#d4af37'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+
+                    confetti.style.backgroundColor = color;
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 10 + 5 + 'px';
+                }
+
+                confetti.style.position = 'absolute'; // 親要素基準で配置
+                confetti.style.left = Math.random() * 100 + '%'; // 横位置ランダム
+                confetti.style.top = -20 + 'px'; // 初期位置は画面上部外
+                confetti.style.opacity = Math.random() + 0.3; // 透明度ランダム
+
+                celebration.appendChild(confetti); // celebration要素に追加
+
+                // アニメーション
+                const animation = confetti.animate(
+                    [
+                        // 開始状態: 初期位置、回転なし、指定の透明度
+                        { transform: 'translate3d(0, 0, 0) rotate(0deg)', opacity: parseFloat(confetti.style.opacity) },
+                        // 終了状態: ランダムなX座標、画面下部までのY座標、ランダムな回転、透明度0
+                        { transform: `translate3d(${Math.random() * 250 - 125}px, ${window.innerHeight + 50}px, 0) rotate(${Math.random() * 720 - 360}deg)`, opacity: 0 }
+                    ],
+                    {
+                        duration: Math.random() * 3000 + 3000, // アニメーション時間 (3〜6秒)
+                        easing: 'cubic-bezier(0.1, 0.9, 0.9, 0.1)', // イージング関数
+                        delay: Math.random() * 500 // 開始遅延を少しランダムに
+                    }
+                );
+
+                // アニメーション終了後に要素を削除
+                animation.onfinish = function() {
+                    if (confetti.parentNode) { // 親要素が存在するか確認
+                        confetti.remove();
+                    }
+                };
+            }
+        }
+
+
+        // Enterキーでも回答できるようにする
+        document.getElementById('answer-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+    </script>
+</body>
+</html>
